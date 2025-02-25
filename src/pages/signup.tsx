@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { signUp } from "@/api/auth";
-import Navbar from "@/components/Navbar";
+// import Navbar from "@/components/Navbar";
 import { useRouter } from "next/router";
 
 export default function SignUp() {
@@ -20,7 +20,7 @@ export default function SignUp() {
       await signUp(name, email, password, confirmPassword);
       alert("Registration successful! Please sign in.");
       router.push("/signin");
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message);
     }
     setLoading(false);

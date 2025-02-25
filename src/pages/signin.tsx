@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { signIn } from "@/api/auth";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  // const router = useRouter();
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,7 +17,7 @@ export default function SignIn() {
       const data = await signIn(email, password);
       localStorage.setItem("token", data.token);
       alert("Sign In successful!");
-    } catch (err: any) {
+    } catch (err) {
       setError(err.response?.data?.message || "Sign In failed");
     }
     setLoading(false);
