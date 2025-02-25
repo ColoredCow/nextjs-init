@@ -21,7 +21,6 @@ export default function SignUp() {
       alert("Registration successful! Please sign in.");
       router.push("/signin");
     } catch (err) {
-  
       setError(err.message);
     }
     setLoading(false);
