@@ -1,8 +1,8 @@
-import api from './index';
+import api from "./index";
 
 // Sign In API
 export const signIn = async (email: string, password: string) => {
-  const response = await api.post('/login', {
+  const response = await api.post("/login", {
     email,
     password,
   });
@@ -14,9 +14,9 @@ export const signUp = async (
   name: string,
   email: string,
   password: string,
-  confirmPassword: string
+  confirmPassword: string,
 ) => {
-  const response = await api.post('/register', {
+  const response = await api.post("/register", {
     name,
     email,
     password,
