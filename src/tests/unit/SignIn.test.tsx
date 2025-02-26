@@ -1,16 +1,16 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import SignIn from "../../../pages/signin";
-import { signIn } from "@/api/auth";
+import SignIn from "../../pages/signin";
+import { signIn } from "@/services/api/auth";
 
-jest.mock("@/api/auth", () => ({
+jest.mock("@/services/api/auth", () => ({
   signIn: jest.fn(),
 }));
 beforeAll(() => {
-    global.alert = jest.fn();
-  });
-  
+  global.alert = jest.fn();
+});
+
 beforeEach(() => {
-localStorage.clear();
+  localStorage.clear();
 });
 
 describe("SignIn Component", () => {
@@ -31,8 +31,12 @@ describe("SignIn Component", () => {
     });
 
     render(<SignIn />);
-    fireEvent.change(screen.getByPlaceholderText("Email"), { target: { value: "test@example.com" } });
-    fireEvent.change(screen.getByPlaceholderText("Password"), { target: { value: "wrongpassword" } });
+    fireEvent.change(screen.getByPlaceholderText("Email"), {
+      target: { value: "test@example.com" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Password"), {
+      target: { value: "wrongpassword" },
+    });
 
     fireEvent.click(screen.getByRole("button", { name: "Sign In" }));
 
@@ -46,8 +50,12 @@ describe("SignIn Component", () => {
     (signIn as jest.Mock).mockResolvedValueOnce({ token: "mock-token" });
 
     render(<SignIn />);
-    fireEvent.change(screen.getByPlaceholderText("Email"), { target: { value: "test@example.com" } });
-    fireEvent.change(screen.getByPlaceholderText("Password"), { target: { value: "password123" } });
+    fireEvent.change(screen.getByPlaceholderText("Email"), {
+      target: { value: "test@example.com" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Password"), {
+      target: { value: "password123" },
+    });
 
     fireEvent.click(screen.getByRole("button", { name: "Sign In" }));
 
@@ -62,12 +70,19 @@ describe("SignIn Component", () => {
 
   test("disables button while signing in", async () => {
     (signIn as jest.Mock).mockImplementation(
-      () => new Promise((resolve) => setTimeout(() => resolve({ token: "mock-token" }), 1000))
+      () =>
+        new Promise((resolve) =>
+          setTimeout(() => resolve({ token: "mock-token" }), 1000),
+        ),
     );
 
     render(<SignIn />);
-    fireEvent.change(screen.getByPlaceholderText("Email"), { target: { value: "test@example.com" } });
-    fireEvent.change(screen.getByPlaceholderText("Password"), { target: { value: "password123" } });
+    fireEvent.change(screen.getByPlaceholderText("Email"), {
+      target: { value: "test@example.com" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Password"), {
+      target: { value: "password123" },
+    });
 
     const button = screen.getByRole("button", { name: "Sign In" });
     fireEvent.click(button);
@@ -79,18 +94,22 @@ describe("SignIn Component", () => {
     (signIn as jest.Mock).mockRejectedValueOnce({
       response: { data: { message: "Sign In failed" } },
     });
-  
+
     render(<SignIn />);
-    fireEvent.change(screen.getByPlaceholderText("Email"), { target: { value: "test@example.com" } });
-    fireEvent.change(screen.getByPlaceholderText("Password"), { target: { value: "password123" } });
-  
+    fireEvent.change(screen.getByPlaceholderText("Email"), {
+      target: { value: "test@example.com" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Password"), {
+      target: { value: "password123" },
+    });
+
     fireEvent.click(screen.getByRole("button", { name: "Sign In" }));
-  
+
     // Ensure error message appears
     await waitFor(() => {
       expect(screen.getByText("Sign In failed")).toBeInTheDocument();
     });
-  
+
     // Ensure token was NOT stored
     await waitFor(() => {
       expect(localStorage.getItem("token")).toBeNull();

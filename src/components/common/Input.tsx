@@ -7,10 +7,19 @@ interface InputProps {
   type?: "text" | "email" | "password";
 }
 
-const Input: React.FC<InputProps> = ({ label, placeholder, error, type = "text" }) => {
+const Input: React.FC<InputProps> = ({
+  label,
+  placeholder,
+  error,
+  type = "text",
+}) => {
   return (
     <div className="w-full">
-      {label && <label className="block text-sm font-medium text-foreground mb-1">{label}</label>}
+      {label && (
+        <label className="block text-sm font-medium text-foreground mb-1">
+          {label}
+        </label>
+      )}
       <input
         type={type}
         placeholder={placeholder}
