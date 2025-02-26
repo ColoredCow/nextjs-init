@@ -1,4 +1,3 @@
-// pages/signin.tsx
 import SignInForm from "@/components/sections/Auth/SignInForm";
 
 export default function SignInPage() {

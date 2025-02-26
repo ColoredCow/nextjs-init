@@ -1,4 +1,3 @@
-// components/sections/Auth/SignUpForm.tsx
 import { useState } from "react";
 import { signUp } from "@/services/api/auth";
 import { useRouter } from "next/router";

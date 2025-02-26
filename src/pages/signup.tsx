@@ -1,4 +1,3 @@
-// pages/signup.tsx
 import SignUpForm from "@/components/sections/Auth/SignUpForm";
 
 export default function SignUpPage() {
