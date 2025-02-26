@@ -8,7 +8,7 @@ const customJestConfig = {
   testEnvironment: "jest-environment-jsdom",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1", // Allow imports like "@/components/Button"
+    "^@/(.*)$": "<rootDir>/src/$1",
   },
 };
 
