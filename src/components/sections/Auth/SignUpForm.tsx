@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { signUp } from "@/services/api/auth";
 import { useRouter } from "next/router";
+import { AxiosError } from "axios"; // Import AxiosError for better error handling
 
 export default function SignUpForm() {
   const [name, setName] = useState("");
@@ -20,9 +21,16 @@ export default function SignUpForm() {
       alert("Registration successful! Please sign in.");
       router.push("/signin");
     } catch (err) {
-      setError(err.message);
+      if (err instanceof AxiosError) {
+        setError(err.response?.data?.message || "Sign Up failed");
+      } else if (err instanceof Error) {
+        setError(err.message || "Sign Up failed");
+      } else {
+        setError("Sign Up failed");
+      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
