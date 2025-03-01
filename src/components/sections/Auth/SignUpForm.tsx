@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { signUp } from "@/services/api/auth";
 import { useRouter } from "next/router";
-import { AxiosError } from "axios"; // Import AxiosError for better error handling
+import { AxiosError } from "axios";
 
 export default function SignUpForm() {
   const [name, setName] = useState("");
@@ -16,15 +16,14 @@ export default function SignUpForm() {
     e.preventDefault();
     setLoading(true);
     setError("");
+
     try {
       await signUp(name, email, password, confirmPassword);
-      alert("Registration successful! Please sign in.");
-      router.push("/signin");
+      alert("OTP sent to your email!");
+      router.push(`/verifyotp?email=${email}`); // Redirect to OTP screen
     } catch (err) {
       if (err instanceof AxiosError) {
         setError(err.response?.data?.message || "Sign Up failed");
-      } else if (err instanceof Error) {
-        setError(err.message || "Sign Up failed");
       } else {
         setError("Sign Up failed");
       }
