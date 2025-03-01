@@ -20,7 +20,7 @@ export default function SignUpForm() {
     try {
       await signUp(name, email, password, confirmPassword);
       alert("OTP sent to your email!");
-      router.push(`/verifyotp?email=${email}`); // Redirect to OTP screen
+      router.push(`/verifyotp?email=${email}`);
     } catch (err) {
       if (err instanceof AxiosError) {
         setError(err.response?.data?.message || "Sign Up failed");
