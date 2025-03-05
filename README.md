@@ -9,7 +9,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
    git clone https://github.com/ColoredCow/nextjs-init.git
    ```
 
-2. Ensure you have Node.js installed (Android version requires Node.js >=18.18.0).
+2. Ensure you have Node.js installed (version requires Node.js >=18.18.0).
 
 3. Install dependencies:
    ```bash
