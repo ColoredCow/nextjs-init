@@ -17,7 +17,7 @@ export default function SignInForm() {
     setError("");
     try {
       const data = await signIn(email, password);
-      // TODO: Not needed once we implement the `useAuth` hook
+      // TODO: Not needed this code once we implement the `useAuth` hook
       if (data?.access_token) {
         alert("Sign In successful");
         router.push("/dashboard");
