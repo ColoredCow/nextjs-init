@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import SignIn from "../../pages/signin";
+import SignIn from "@/app/(guest)/signin/page";
 import { signIn } from "@/services/api/auth";
 
 jest.mock("@/services/api/auth", () => ({

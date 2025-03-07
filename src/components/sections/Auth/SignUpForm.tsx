@@ -1,7 +1,9 @@
+"use client";
+
 import { useState } from "react";
 import { signUp } from "@/services/api/auth";
-import { useRouter } from "next/router";
-import { AxiosError } from "axios"; // Import AxiosError for better error handling
+import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
 export default function SignUpForm() {
   const [name, setName] = useState("");
