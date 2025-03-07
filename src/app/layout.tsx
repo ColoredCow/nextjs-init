@@ -9,7 +9,7 @@ const nunito = Nunito({
 });
 
 export const metadata = {
-  title: "bolilerplate",
+  title: "Bolilerplate",
   description: "A boilerplate for Next.js with Tailwind CSS and TypeScript",
 };
 
