@@ -16,10 +16,9 @@ export default function SignInForm() {
     setLoading(true);
     setError("");
     try {
-      const data = await signIn(email, password);
-      localStorage.setItem("token", data.token);
+      await signIn(email, password);
       alert("Sign In successful!");
-      router.push("/dashboard"); // Redirect to dashboard
+      router.push("/dashboard");
     } catch (err) {
       if (err instanceof Error) {
         const axiosError = err as any; // or use AxiosError from axios types
