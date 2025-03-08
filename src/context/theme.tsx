@@ -1,3 +1,4 @@
+import { createCookie, readCookie } from "@/services/cookiesService";
 import {
   createContext,
   useState,
@@ -17,17 +18,21 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState("light");
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem("theme") || "light";
-    document.documentElement.classList.remove("light", "dark");
-    document.documentElement.classList.add(storedTheme);
-    setTheme(storedTheme);
+    const fetchTheme = async () => {
+      const theme = await readCookie("theme");
+      const storedTheme = theme?.value || "light";
+      document.documentElement.classList.remove("light", "dark");
+      document.documentElement.classList.add(storedTheme);
+      setTheme(storedTheme);
+    };
+    fetchTheme();
   }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     document.documentElement.classList.remove("light", "dark");
     document.documentElement.classList.add(newTheme);
-    localStorage.setItem("theme", newTheme);
+    createCookie("theme", newTheme);
     setTheme(newTheme);
   };
 
