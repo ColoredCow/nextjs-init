@@ -1,7 +1,9 @@
-import Navbar from "../components/layout/Navbar";
-import Button from "../components/common/Button";
+"use client";
 
-export default function HomePage() {
+import Button from "@/components/common/Button";
+import Navbar from "@/components/layout/Navbar";
+
+const Home = () => {
   return (
     <div>
       <Navbar />
@@ -13,4 +15,6 @@ export default function HomePage() {
       </main>
     </div>
   );
-}
+};
+
+export default Home;
