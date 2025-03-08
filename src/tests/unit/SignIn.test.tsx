@@ -3,13 +3,15 @@ import SignIn from "@/app/signin/page";
 import { signIn } from "@/services/api/auth";
 import { useRouter } from "next/navigation";
 
+jest.mock("@/services/api/auth", () => ({
+  signIn: jest.fn(),
+}));
+
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
 
-jest.mock("@/services/api/auth", () => ({
-  signIn: jest.fn(),
-}));
+const mockPush = jest.fn();
 
 beforeAll(() => {
   global.alert = jest.fn();
@@ -18,7 +20,7 @@ beforeAll(() => {
 beforeEach(() => {
   localStorage.clear();
   (useRouter as jest.Mock).mockReturnValue({
-    push: jest.fn(),
+    push: mockPush,
   });
 });
 
