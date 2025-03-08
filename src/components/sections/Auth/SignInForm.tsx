@@ -15,8 +15,15 @@ export default function SignInForm() {
     e.preventDefault();
     setLoading(true);
     setError("");
+
     try {
       const data = await signIn(email, password);
+
+      if (data?.message === "Login failed. Please verify your email address.") {
+        alert("Your email is not verified. Please check your inbox.");
+        return; // Stop further execution
+      }
+
       localStorage.setItem("token", data.token);
       alert("Sign In successful!");
       router.push("/dashboard"); // Redirect to dashboard
@@ -30,7 +37,7 @@ export default function SignInForm() {
         setError("Sign In failed");
       }
     } finally {
-      setLoading(false); // Move this inside the `finally` block to always stop loading
+      setLoading(false); // Always stop loading
     }
   };
 
