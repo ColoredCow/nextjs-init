@@ -17,9 +17,11 @@ export default function SignInForm() {
     setError("");
     try {
       const data = await signIn(email, password);
-      localStorage.setItem("token", data.token);
-      alert("Sign In successful!");
-      router.push("/dashboard"); // Redirect to dashboard
+      // TODO: Not needed this code once we implement the `useAuth` hook
+      if (data?.access_token) {
+        alert("Sign In successful");
+        router.push("/dashboard");
+      }
     } catch (err) {
       if (err instanceof Error) {
         const axiosError = err as any; // or use AxiosError from axios types
