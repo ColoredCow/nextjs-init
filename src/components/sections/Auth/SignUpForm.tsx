@@ -18,7 +18,7 @@ export default function SignUpForm() {
     setError("");
     try {
       await signUp(name, email, password, confirmPassword);
-      alert("Registration successful! Please sign in.");
+      alert("Registration successful! Please Verify You Email address.");
       router.push("/signin");
     } catch (err) {
       if (err instanceof AxiosError) {
