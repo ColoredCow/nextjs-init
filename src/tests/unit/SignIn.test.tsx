@@ -1,16 +1,25 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import SignIn from "@/app/(guest)/signin/page";
+import SignIn from "@/app/signin/page";
 import { signIn } from "@/services/api/auth";
+import { useRouter } from "next/navigation";
+
+jest.mock("next/navigation", () => ({
+  useRouter: jest.fn(),
+}));
 
 jest.mock("@/services/api/auth", () => ({
   signIn: jest.fn(),
 }));
+
 beforeAll(() => {
   global.alert = jest.fn();
 });
 
 beforeEach(() => {
   localStorage.clear();
+  (useRouter as jest.Mock).mockReturnValue({
+    push: jest.fn(),
+  });
 });
 
 describe("SignIn Component", () => {
