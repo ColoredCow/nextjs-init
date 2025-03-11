@@ -45,7 +45,7 @@ const Home = () => {
                       href="https://laravel.com/docs"
                       className="underline text-gray-900 dark:text-white"
                     >
-                      Documentation Testing123
+                      Documentation
                     </a>
                   </div>
                 </div>
