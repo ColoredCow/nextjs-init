@@ -1,0 +1,10 @@
+{
+  "extends": ["next", "plugin:prettier/recommended"],
+  "plugins": ["prettier"],
+  "rules": {
+    "no-mixed-spaces-and-tabs": ["error"],
+    "no-console": "error",
+    "semi": ["error", "always"],
+    "quotes": ["error", "double"]
+  }
+}
