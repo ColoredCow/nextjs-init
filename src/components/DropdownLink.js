@@ -25,7 +25,7 @@ export const DropdownButton = ({ children, ...props }) => (
         } focus:outline-none transition duration-150 ease-in-out`}
         {...props}
       >
-        &gt;{children}
+        {children}
       </button>
     )}
   </Menu.Item>

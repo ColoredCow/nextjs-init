@@ -45,7 +45,7 @@ const Home = () => {
                       href="https://laravel.com/docs"
                       className="underline text-gray-900 dark:text-white"
                     >
-                      &gt; Documentation
+                      Documentation
                     </a>
                   </div>
                 </div>
@@ -80,7 +80,7 @@ const Home = () => {
                       href="https://laracasts.com"
                       className="underline text-gray-900 dark:text-white"
                     >
-                      &gt; Laracasts
+                      Laracasts
                     </a>
                   </div>
                 </div>
@@ -114,7 +114,7 @@ const Home = () => {
                       href="https://laravel-news.com/"
                       className="underline text-gray-900 dark:text-white"
                     >
-                      &gt; Laravel News
+                      Laravel News
                     </a>
                   </div>
                 </div>
@@ -172,42 +172,42 @@ const Home = () => {
                       href="https://laravel.com/docs/billing"
                       className="underline"
                     >
-                      &gt; Cashier
+                      Cashier
                     </a>
                     ,{" "}
                     <a
                       href="https://laravel.com/docs/dusk"
                       className="underline"
                     >
-                      &gt; Dusk
+                      Dusk
                     </a>
                     ,{" "}
                     <a
                       href="https://laravel.com/docs/broadcasting"
                       className="underline"
                     >
-                      &gt; Echo
+                      Echo
                     </a>
                     ,{" "}
                     <a
                       href="https://laravel.com/docs/horizon"
                       className="underline"
                     >
-                      &gt; Horizon
+                      Horizon
                     </a>
                     ,{" "}
                     <a
                       href="https://laravel.com/docs/sanctum"
                       className="underline"
                     >
-                      &gt; Sanctum
+                      Sanctum
                     </a>
                     ,{" "}
                     <a
                       href="https://laravel.com/docs/telescope"
                       className="underline"
                     >
-                      &gt; Telescope
+                      Telescope
                     </a>
                     , and more.
                   </div>
@@ -235,7 +235,7 @@ const Home = () => {
                   href="https://laravel.bigcartel.com"
                   className="ml-1 underline"
                 >
-                  &gt; Shop
+                  Shop
                 </a>
 
                 <svg
@@ -254,7 +254,7 @@ const Home = () => {
                   href="https://github.com/sponsors/taylorotwell"
                   className="ml-1 underline"
                 >
-                  &gt; Sponsor
+                  Sponsor
                 </a>
               </div>
             </div>

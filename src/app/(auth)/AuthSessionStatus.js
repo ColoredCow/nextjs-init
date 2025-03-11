@@ -5,7 +5,7 @@ const AuthSessionStatus = ({ status, className, ...props }) => (
         className={`${className} font-medium text-sm text-green-600`}
         {...props}
       >
-        &gt;{status}
+        {status}
       </div>
     )}
   </>

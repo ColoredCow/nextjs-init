@@ -105,7 +105,7 @@ const Page = () => {
           href="/login"
           className="underline text-sm text-gray-600 hover:text-gray-900"
         >
-          &gt; Already registered?
+          Already registered?
         </Link>
 
         <Button className="ml-4">Register</Button>

@@ -102,7 +102,7 @@ const Login = () => {
             href="/forgot-password"
             className="underline text-sm text-gray-600 hover:text-gray-900"
           >
-            &gt; Forgot your password?
+            Forgot your password?
           </Link>
 
           <Button className="ml-3">Login</Button>

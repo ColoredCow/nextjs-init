@@ -37,7 +37,7 @@ const Page = () => {
           className="underline text-sm text-gray-600 hover:text-gray-900"
           onClick={logout}
         >
-          &gt; Logout
+          Logout
         </button>
       </div>
     </>
