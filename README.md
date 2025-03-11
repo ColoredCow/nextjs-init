@@ -29,10 +29,7 @@
 
      ```ini
      # If hosted using "serve"
-     NEXT_PUBLIC_API_BASE_URL=http://localhost:3000/api
-
-     # If hosted using Valet
-     NEXT_PUBLIC_API_BASE_URL=https://laravel-init.test/api
+     NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
      ```
 
 4. Start the development server:
