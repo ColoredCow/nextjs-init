@@ -1,4 +1,5 @@
 # ColoredCow Next.js Boilerplate
+
 ## Getting started
 
 ### Running locally
@@ -11,28 +12,30 @@
 #### Installation steps
 
 1. Clone the repository:
+
    ```sh
    git clone https://github.com/ColoredCow/nextjs-init.git
    ```
 
-1. Install dependencies:
+2. Install dependencies:
+
    ```sh
    npm install
    ```
 
-1. Configure environment variables:
+3. Configure environment variables:
+
    - Copy `.env.example` to `.env` and configure as needed.
-      ```ini
-      # If hosted using "serve"
-      NEXT_PUBLIC_API_BASE_URL=http://localhost:3000/api
 
-      # If hosted using Valet
-      NEXT_PUBLIC_API_BASE_URL=https://laravel-init.test/api
-      ```
+     ```ini
+     # If hosted using "serve"
+     NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
+     ```
 
-2. Start the development server:
+4. Start the development server:
+
    ```sh
    npm run dev
    ```
 
-3. Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
