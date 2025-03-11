@@ -29,7 +29,7 @@
 
      ```ini
      # If hosted using "serve"
-     NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
+     NEXT_PUBLIC_BACKEND_URL=http://localhost:3000
      ```
 
 4. Start the development server:
