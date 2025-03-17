@@ -9,7 +9,7 @@ const BottomTabBar = ({ routes }) => {
      */
   // const routes = [
   //     {
-  //         href: '/cigar',
+  //         href: '/home',
   //         label: 'HOME',
   //         icon: (
   //             <svg className="h-6 w-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
@@ -23,7 +23,7 @@ const BottomTabBar = ({ routes }) => {
   //         ),
   //     },
   //     {
-  //         href: '/subscriber',
+  //         href: '/community',
   //         label: 'COMMUNITY',
   //         icon: (
   //             <svg className="h-6 w-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
