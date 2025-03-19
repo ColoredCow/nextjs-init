@@ -27,14 +27,14 @@ const UsersPage = () => {
     };
 
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // No dependencies here
+  }, []);
 
-  const handleRoleChange = async (userId, selectedRoles) => {
+  const handleRoleChange = async (userId, selectedRole) => {
     try {
-      await updateUserRoles(userId, selectedRoles);
-      alert("Roles updated successfully!");
-      const updatedUsers = await fetchUsers(); // Refresh users
+      const rolePayload = selectedRole ? [selectedRole] : [];
+      await updateUserRoles(userId, rolePayload);
+      alert("Role updated successfully!");
+      const updatedUsers = await fetchUsers();
       setUsers(updatedUsers);
     } catch (error) {
       alert("An error occurred. Please try again.");
@@ -52,7 +52,7 @@ const UsersPage = () => {
             <tr>
               <th className="border p-2">Name</th>
               <th className="border p-2">Email</th>
-              <th className="border p-2">Roles</th>
+              <th className="border p-2">Role</th>
               <th className="border p-2">Actions</th>
             </tr>
           </thead>
@@ -63,19 +63,11 @@ const UsersPage = () => {
                 <td className="border p-2">{user.email}</td>
                 <td className="border p-2">
                   <select
-                    multiple
-                    value={user.roles.map((role) => role.name)}
-                    onChange={(e) =>
-                      handleRoleChange(
-                        user.id,
-                        Array.from(
-                          e.target.selectedOptions,
-                          (option) => option.value
-                        )
-                      )
-                    }
+                    value={user.roles.length ? user.roles[0].name : ""}
+                    onChange={(e) => handleRoleChange(user.id, e.target.value)}
                     className="w-full"
                   >
+                    <option value="">Select Role</option>
                     {roles.map((role) => (
                       <option key={role.id} value={role.name}>
                         {role.name}
@@ -85,10 +77,10 @@ const UsersPage = () => {
                 </td>
                 <td className="border p-2">
                   <button
-                    onClick={() => handleRoleChange(user.id, [])}
+                    onClick={() => handleRoleChange(user.id, "")}
                     className="px-3 py-1 bg-red-500 text-white rounded"
                   >
-                    Remove Roles
+                    Remove Role
                   </button>
                 </td>
               </tr>
