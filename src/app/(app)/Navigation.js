@@ -1,5 +1,6 @@
 import ApplicationLogo from "@/components/ApplicationLogo";
 import Dropdown from "@/components/Dropdown";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import NavLink from "@/components/NavLink";
 import ResponsiveNavLink, {
@@ -11,8 +12,16 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const Navigation = ({ user }) => {
+  const router = useRouter();
   const { logout } = useAuth();
 
+  const isAdmin =
+    Array.isArray(user?.roles) &&
+    user.roles.some((role) => role?.name === "admin");
+
+  const handleUsersClick = () => {
+    router.push("/dashboard/users");
+  };
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -64,6 +73,11 @@ const Navigation = ({ user }) => {
             >
               {/* Authentication */}
               <DropdownButton onClick={logout}>Logout</DropdownButton>
+              {isAdmin && (
+                <DropdownButton onClick={handleUsersClick}>
+                  Manage Users
+                </DropdownButton>
+              )}
             </Dropdown>
           </div>
 
@@ -147,6 +161,11 @@ const Navigation = ({ user }) => {
             <div className="mt-3 space-y-1">
               {/* Authentication */}
               <ResponsiveNavButton onClick={logout}>Logout</ResponsiveNavButton>
+              {isAdmin && (
+                <ResponsiveNavButton onClick={handleUsersClick}>
+                  Manage Users
+                </ResponsiveNavButton>
+              )}
             </div>
           </div>
         </div>
