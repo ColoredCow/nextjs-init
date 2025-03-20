@@ -3,6 +3,7 @@
 import { useAuth } from "@/hooks/auth";
 import Navigation from "@/app/(app)/Navigation";
 import Loading from "@/app/(app)/Loading";
+import ToastProvider from "@/components/ToastProvider";
 
 const AppLayout = ({ children }) => {
   const { user } = useAuth({ middleware: "auth" });
@@ -15,7 +16,10 @@ const AppLayout = ({ children }) => {
     <div className="min-h-screen bg-gray-100">
       <Navigation user={user} />
 
-      <main>{children}</main>
+      <main>
+        <ToastProvider />
+        {children}
+      </main>
     </div>
   );
 };
