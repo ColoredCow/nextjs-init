@@ -7,10 +7,12 @@ const UsersPage = () => {
     middleware: "auth",
   });
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,6 +23,7 @@ const UsersPage = () => {
           fetchRoles(),
         ]);
         setUsers(usersData?.data || []);
+        setFilteredUsers(usersData?.data || []);
         setRoles(rolesData || []);
         setTotalPages(usersData?.last_page || 1);
       } catch (error) {
@@ -31,6 +34,19 @@ const UsersPage = () => {
 
     fetchData();
   }, [currentPage]);
+
+  useEffect(() => {
+    const lowerCaseQuery = searchQuery.toLowerCase();
+    const results = users.filter(
+      (user) =>
+        user.name.toLowerCase().includes(lowerCaseQuery) ||
+        user.email.toLowerCase().includes(lowerCaseQuery) ||
+        user.roles.some((role) =>
+          role.name.toLowerCase().includes(lowerCaseQuery)
+        )
+    );
+    setFilteredUsers(results);
+  }, [searchQuery, users]);
 
   const handleRoleChange = async (userId, selectedRole) => {
     try {
@@ -50,12 +66,23 @@ const UsersPage = () => {
     }
   };
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
   if (loading) return <p>Loading users...</p>;
 
   return (
     <div className="py-12">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <h1 className="text-xl font-bold mb-4">Manage Users</h1>
+        <input
+          type="text"
+          placeholder="Search by name, email, or role"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="w-full p-2 mb-4 border rounded"
+        />
         <table className="w-full border-collapse">
           <thead>
             <tr>
@@ -66,8 +93,8 @@ const UsersPage = () => {
             </tr>
           </thead>
           <tbody>
-            {users.length > 0 ? (
-              users.map((user) => (
+            {filteredUsers.length > 0 ? (
+              filteredUsers.map((user) => (
                 <tr key={user.id}>
                   <td className="border p-2">{user.name}</td>
                   <td className="border p-2">{user.email}</td>
