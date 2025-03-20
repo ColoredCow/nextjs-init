@@ -24,8 +24,8 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
   const csrf = () => axios.get("/sanctum/csrf-cookie");
 
-  const fetchUsers = async () => {
-    const { data } = await axios.get("/api/admin/users");
+  const fetchUsers = async (page = 1) => {
+    const { data } = await axios.get(`/api/admin/users?page=${page}`);
     return data;
   };
 

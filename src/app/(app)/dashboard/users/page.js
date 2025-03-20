@@ -9,17 +9,20 @@ const UsersPage = () => {
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const [usersData, rolesData] = await Promise.all([
-          fetchUsers(),
+          fetchUsers(currentPage),
           fetchRoles(),
         ]);
-        setUsers(usersData);
-        setRoles(rolesData);
+        setUsers(usersData?.data || []);
+        setRoles(rolesData || []);
+        setTotalPages(usersData?.last_page || 1);
       } catch (error) {
         alert("An error occurred. Please try again.");
       }
@@ -27,17 +30,23 @@ const UsersPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [currentPage]);
 
   const handleRoleChange = async (userId, selectedRole) => {
     try {
       const rolePayload = selectedRole ? [selectedRole] : [];
       await updateUserRoles(userId, rolePayload);
       alert("Role updated successfully!");
-      const updatedUsers = await fetchUsers();
-      setUsers(updatedUsers);
+      const updatedUsers = await fetchUsers(currentPage);
+      setUsers(updatedUsers?.data || []);
     } catch (error) {
       alert("An error occurred. Please try again.");
+    }
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
     }
   };
 
@@ -57,36 +66,65 @@ const UsersPage = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td className="border p-2">{user.name}</td>
-                <td className="border p-2">{user.email}</td>
-                <td className="border p-2">
-                  <select
-                    value={user.roles.length ? user.roles[0].name : ""}
-                    onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                    className="w-full"
-                  >
-                    <option value="">Select Role</option>
-                    {roles.map((role) => (
-                      <option key={role.id} value={role.name}>
-                        {role.name}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td className="border p-2">
-                  <button
-                    onClick={() => handleRoleChange(user.id, "")}
-                    className="px-3 py-1 bg-red-500 text-white rounded"
-                  >
-                    Remove Role
-                  </button>
+            {users.length > 0 ? (
+              users.map((user) => (
+                <tr key={user.id}>
+                  <td className="border p-2">{user.name}</td>
+                  <td className="border p-2">{user.email}</td>
+                  <td className="border p-2">
+                    <select
+                      value={user?.roles?.[0]?.name || ""}
+                      onChange={(e) =>
+                        handleRoleChange(user.id, e.target.value)
+                      }
+                      className="w-full"
+                    >
+                      <option value="">Select Role</option>
+                      {roles.map((role) => (
+                        <option key={role.id} value={role.name}>
+                          {role.name}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td className="border p-2">
+                    <button
+                      onClick={() => handleRoleChange(user.id, "")}
+                      className="px-3 py-1 bg-red-500 text-white rounded"
+                    >
+                      Remove Role
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" className="border p-2 text-center">
+                  No users found.
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
+        <div className="flex justify-between mt-4">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-gray-300 rounded"
+          >
+            Previous
+          </button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-gray-300 rounded"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
