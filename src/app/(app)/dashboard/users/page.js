@@ -1,6 +1,8 @@
+// UsersPage.js
 "use client";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/auth";
+import SearchBar from "@/components/SearchBar";
 
 const UsersPage = () => {
   const { fetchUsers, fetchRoles, updateUserRoles } = useAuth({
@@ -10,9 +12,9 @@ const UsersPage = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,8 +24,9 @@ const UsersPage = () => {
           fetchUsers(currentPage),
           fetchRoles(),
         ]);
-        setUsers(usersData?.data || []);
-        setFilteredUsers(usersData?.data || []);
+        const userList = usersData?.data || [];
+        setUsers(userList);
+        setFilteredUsers(userList); // Initialize filteredUsers with all users
         setRoles(rolesData || []);
         setTotalPages(usersData?.last_page || 1);
       } catch (error) {
@@ -60,14 +63,14 @@ const UsersPage = () => {
     }
   };
 
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+  };
+
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
     }
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
   };
 
   if (loading) return <p>Loading users...</p>;
@@ -76,12 +79,9 @@ const UsersPage = () => {
     <div className="py-12">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <h1 className="text-xl font-bold mb-4">Manage Users</h1>
-        <input
-          type="text"
-          placeholder="Search by name, email, or role"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          className="w-full p-2 mb-4 border rounded"
+        <SearchBar
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchChange}
         />
         <table className="w-full border-collapse">
           <thead>
