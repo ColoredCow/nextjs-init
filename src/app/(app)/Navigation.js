@@ -43,6 +43,11 @@ const Navigation = ({ user }) => {
               <NavLink href="/dashboard" active={pathname === "/dashboard"}>
                 Dashboard
               </NavLink>
+              {isAdmin && (
+                <NavLink href="/users" active={pathname === "/users"}>
+                  Manage Users
+                </NavLink>
+              )}
             </div>
           </div>
 
@@ -73,11 +78,6 @@ const Navigation = ({ user }) => {
             >
               {/* Authentication */}
               <DropdownButton onClick={logout}>Logout</DropdownButton>
-              {isAdmin && (
-                <DropdownButton onClick={handleUsersClick}>
-                  Manage Users
-                </DropdownButton>
-              )}
             </Dropdown>
           </div>
 
@@ -161,11 +161,6 @@ const Navigation = ({ user }) => {
             <div className="mt-3 space-y-1">
               {/* Authentication */}
               <ResponsiveNavButton onClick={logout}>Logout</ResponsiveNavButton>
-              {isAdmin && (
-                <ResponsiveNavButton onClick={handleUsersClick}>
-                  Manage Users
-                </ResponsiveNavButton>
-              )}
             </div>
           </div>
         </div>
