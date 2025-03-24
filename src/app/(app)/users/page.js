@@ -1,0 +1,179 @@
+"use client";
+import { useEffect, useState } from "react";
+import { useUserActions } from "@/hooks/user";
+import SearchBar from "@/components/SearchBar";
+import Button from "@/components/Button";
+
+const UsersPage = () => {
+  const { fetchUsers, fetchRoles, updateUserRoles, deleteUser } =
+    useUserActions({ middleware: "auth" });
+  const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [usersData, rolesData] = await Promise.all([
+          fetchUsers(currentPage),
+          fetchRoles(),
+        ]);
+        const userList = usersData?.data || [];
+        setUsers(userList);
+        setFilteredUsers(userList);
+        setRoles(rolesData || []);
+        setTotalPages(usersData?.last_page || 1);
+      } catch (error) {
+        alert("An error occurred. Please try again.");
+      }
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [currentPage]);
+
+  useEffect(() => {
+    const lowerCaseQuery = searchQuery.toLowerCase();
+    const results = users.filter(
+      (user) =>
+        user.name.toLowerCase().includes(lowerCaseQuery) ||
+        user.email.toLowerCase().includes(lowerCaseQuery) ||
+        user.roles.some((role) =>
+          role.name.toLowerCase().includes(lowerCaseQuery)
+        )
+    );
+    setFilteredUsers(results);
+  }, [searchQuery, users]);
+
+  const handleRoleChange = async (userId, selectedRole) => {
+    try {
+      const rolePayload = selectedRole ? [selectedRole] : [];
+      await updateUserRoles(userId, rolePayload);
+      alert("Role updated successfully!");
+      const updatedUsers = await fetchUsers(currentPage);
+      setUsers(updatedUsers?.data || []);
+    } catch (error) {
+      alert("An error occurred. Please try again.");
+    }
+  };
+
+  const handleDeleteUser = async (userId) => {
+    if (confirm("Are you sure you want to delete this user?")) {
+      try {
+        await deleteUser(userId);
+        alert("User deleted successfully!");
+        const updatedUsers = await fetchUsers(currentPage);
+        setUsers(updatedUsers?.data || []);
+      } catch (error) {
+        alert("An error occurred. Please try again.");
+      }
+    }
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  if (loading) return <p>Loading users...</p>;
+
+  return (
+    <div className="py-12">
+      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <h1 className="text-2xl font-bold mb-6">Manage Users</h1>
+        <SearchBar
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchChange}
+        />
+        <div className="overflow-x-auto mt-4">
+          <table className="min-w-full table-auto border rounded-lg overflow-hidden">
+            <thead>
+              <tr className="bg-gray-800 text-white">
+                <th className="p-4 text-left">Name</th>
+                <th className="p-4 text-left">Email</th>
+                <th className="p-4 text-center">Role</th>
+                <th className="p-4 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredUsers.length > 0 ? (
+                filteredUsers.map((user) => (
+                  <tr key={user.id} className="odd:bg-gray-50 even:bg-white">
+                    <td className="p-4 text-gray-700 truncate max-w-xs">
+                      {user.name}
+                    </td>
+                    <td className="p-4 text-gray-700 truncate max-w-xs">
+                      {user.email}
+                    </td>
+                    <td className="p-4 text-center">
+                      <select
+                        value={user?.roles?.[0]?.name || ""}
+                        onChange={(e) =>
+                          handleRoleChange(user.id, e.target.value)
+                        }
+                        className="w-32 p-2 border rounded"
+                      >
+                        <option value="">Select Role</option>
+                        {roles.map((role) => (
+                          <option key={role.id} value={role.name}>
+                            {role.name}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="p-4 text-center">
+                      <Button
+                        onClick={() => handleDeleteUser(user.id)}
+                        className="bg-red-500 hover:bg-red-600"
+                      >
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="p-4 text-center">
+                    No users found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="flex justify-between mt-6">
+          <Button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-gray-300 rounded"
+          >
+            Previous
+          </Button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <Button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-gray-300 rounded"
+          >
+            Next
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UsersPage;
