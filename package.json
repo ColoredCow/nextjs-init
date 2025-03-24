@@ -15,11 +15,15 @@
     "next": "^14.2.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
     "react-hot-toast": "^2.5.2",
     "react-icons": "^5.5.0",
 >>>>>>> Stashed changes
+=======
+    "react-hot-toast": "^2.5.2",
+>>>>>>> c5656269cf493a04eb48f8cf79d403797b44d36e
     "swr": "^1.3.0"
   },
   "devDependencies": {
