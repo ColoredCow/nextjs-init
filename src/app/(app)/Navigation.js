@@ -9,12 +9,18 @@ import { DropdownButton } from "@/components/DropdownLink";
 import { useAuth } from "@/hooks/auth";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-const Navigation = ({ user }) => {
-  const { logout } = useAuth();
-
-  const [open, setOpen] = useState(false);
+const Navigation = () => {
+  const { user, logout } = useAuth();
+  const [open, setOpen] = useState(false); // For mobile menu
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // For dropdown
   const pathname = usePathname();
+  const router = useRouter();
+
+  const goToProfile = () => {
+    router.push("/profile");
+  };
 
   return (
     <nav className="bg-white border-b border-gray-100">
@@ -43,9 +49,11 @@ const Navigation = ({ user }) => {
               align="right"
               width="48"
               trigger={
-                <button className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition duration-150 ease-in-out">
+                <button
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition duration-150 ease-in-out"
+                >
                   <div>{user?.name}</div>
-
                   <div className="ml-1">
                     <svg
                       className="fill-current h-4 w-4"
@@ -62,6 +70,9 @@ const Navigation = ({ user }) => {
                 </button>
               }
             >
+              {/* Profile Link */}
+              <DropdownButton onClick={goToProfile}>Profile</DropdownButton>
+              
               {/* Authentication */}
               <DropdownButton onClick={logout}>Logout</DropdownButton>
             </Dropdown>
