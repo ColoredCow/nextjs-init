@@ -94,13 +94,9 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
       await csrf();
       setErrors([]);
 
-      const response = await axios.put("/api/profile", { name, email });
-    } catch (error) {
-      if (error.response?.status === 422) {
-        setErrors(error.response.data.errors);
-      } else {
-        console.error("Profile update failed:", error);
-      }
+      await axios.put("/api/profile", { name, email });
+    } catch ({ response }) {
+      setErrors(response?.status === 422 ? response.data.errors : []);
     }
   };
 
