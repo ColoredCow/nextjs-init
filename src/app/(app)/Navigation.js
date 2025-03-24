@@ -1,5 +1,6 @@
 import ApplicationLogo from "@/components/ApplicationLogo";
 import Dropdown from "@/components/Dropdown";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import NavLink from "@/components/NavLink";
 import ResponsiveNavLink, {
@@ -9,18 +10,24 @@ import { DropdownButton } from "@/components/DropdownLink";
 import { useAuth } from "@/hooks/auth";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
-const Navigation = () => {
-  const { user, logout } = useAuth();
-  const [open, setOpen] = useState(false); // For mobile menu
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // For dropdown
-  const pathname = usePathname();
+const Navigation = ({ user }) => {
   const router = useRouter();
+  const { logout } = useAuth();
 
+  const isAdmin =
+    Array.isArray(user?.roles) &&
+    user.roles.some((role) => role?.name === "admin");
+
+  const handleUsersClick = () => {
+    router.push("/users");
+  };
   const goToProfile = () => {
     router.push("/profile");
   };
+
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <nav className="bg-white border-b border-gray-100">
@@ -40,6 +47,11 @@ const Navigation = () => {
               <NavLink href="/dashboard" active={pathname === "/dashboard"}>
                 Dashboard
               </NavLink>
+              {isAdmin && (
+                <NavLink href="/users" active={pathname === "/users"}>
+                  Manage Users
+                </NavLink>
+              )}
             </div>
           </div>
 
@@ -49,11 +61,9 @@ const Navigation = () => {
               align="right"
               width="48"
               trigger={
-                <button
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition duration-150 ease-in-out"
-                >
+                <button className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition duration-150 ease-in-out">
                   <div>{user?.name}</div>
+
                   <div className="ml-1">
                     <svg
                       className="fill-current h-4 w-4"
@@ -72,7 +82,6 @@ const Navigation = () => {
             >
               {/* Profile Link */}
               <DropdownButton onClick={goToProfile}>Profile</DropdownButton>
-              
               {/* Authentication */}
               <DropdownButton onClick={logout}>Logout</DropdownButton>
             </Dropdown>
