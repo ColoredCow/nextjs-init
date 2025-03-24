@@ -20,7 +20,7 @@ const Navigation = ({ user }) => {
     user.roles.some((role) => role?.name === "admin");
 
   const handleUsersClick = () => {
-    router.push("/dashboard/users");
+    router.push("/users");
   };
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
