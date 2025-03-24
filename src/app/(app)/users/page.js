@@ -1,4 +1,3 @@
-// UsersPage.js
 "use client";
 import { useEffect, useState } from "react";
 import { useUserActions } from "@/hooks/user";
