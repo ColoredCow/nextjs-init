@@ -22,6 +22,10 @@ const Navigation = ({ user }) => {
   const handleUsersClick = () => {
     router.push("/users");
   };
+  const goToProfile = () => {
+    router.push("/profile");
+  };
+
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -76,6 +80,8 @@ const Navigation = ({ user }) => {
                 </button>
               }
             >
+              {/* Profile Link */}
+              <DropdownButton onClick={goToProfile}>Profile</DropdownButton>
               {/* Authentication */}
               <DropdownButton onClick={logout}>Logout</DropdownButton>
             </Dropdown>

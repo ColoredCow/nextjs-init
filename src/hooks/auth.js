@@ -89,6 +89,43 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
       });
   };
 
+  const updateProfile = async ({ name, email, setErrors }) => {
+    try {
+      await csrf();
+      setErrors([]);
+
+      await axios.put("/api/profile", { name, email });
+    } catch ({ response }) {
+      setErrors(response?.status === 422 ? response.data.errors : []);
+    }
+  };
+
+  const updatePassword = async ({
+    password,
+    password_confirmation,
+    setErrors,
+  }) => {
+    try {
+      await csrf();
+
+      const response = await axios.put("/api/profile/password", {
+        password,
+        password_confirmation,
+      });
+
+      setErrors([]);
+
+      return response.data;
+    } catch (error) {
+      if (error.response?.status === 422) {
+        setErrors(error.response.data.errors);
+      } else {
+        showToast("Password update failed. Please try again.", "error");
+      }
+      throw error;
+    }
+  };
+
   const resendEmailVerification = ({ setStatus }) => {
     axios
       .post("/email/verification-notification")
@@ -123,5 +160,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     resetPassword,
     resendEmailVerification,
     logout,
+    updateProfile,
+    updatePassword,
   };
 };
