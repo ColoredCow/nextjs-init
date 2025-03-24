@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { FaUser, FaLock, FaCamera } from "react-icons/fa";
+import { FaUser, FaLock } from "react-icons/fa";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import InputError from "@/components/InputError";
@@ -64,23 +64,6 @@ export default function ProfilePage() {
     }
   };
 
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      try {
-        await updateProfile({ profilePicture: file });
-        showToast("Profile picture updated successfully!", "success");
-      } catch (error) {
-        setErrors(error);
-        showToast("Failed to update profile picture.", "error");
-      }
-    }
-  };
-
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:py-8">
       <div className="mx-auto max-w-4xl space-y-6">
@@ -94,17 +77,13 @@ export default function ProfilePage() {
                 className="h-20 w-20 rounded-full border-4 border-white object-cover sm:h-24 sm:w-24"
               />
               <button
-                onClick={triggerFileInput}
                 className="absolute bottom-0 right-0 rounded-full bg-white p-2 text-gray-900 transition-colors hover:bg-gray-100"
                 aria-label="Upload new profile picture"
-              >
-                <FaCamera />
-              </button>
+              ></button>
               <input
                 type="file"
                 ref={fileInputRef}
                 className="hidden"
-                onChange={handleFileChange}
                 accept="image/*"
               />
             </div>
