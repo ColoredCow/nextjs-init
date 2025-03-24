@@ -13,6 +13,7 @@ export default function ProfilePage() {
   const { user, updateProfile, updatePassword } = useAuth({
     middleware: "auth",
   });
+
   const [name, setName] = useState(user?.name || "");
   const [displayName, setDisplayName] = useState(user?.name || "");
   const [password, setPassword] = useState("");
@@ -38,16 +39,28 @@ export default function ProfilePage() {
 
   const submitSecurityForm = async (event) => {
     event.preventDefault();
+
+    if (password !== passwordConfirmation) {
+      setErrors({
+        password_confirmation: ["The password confirmation does not match."],
+      });
+      return;
+    }
+
     try {
       await updatePassword({
         password,
         password_confirmation: passwordConfirmation,
         setErrors,
       });
+
       showToast("Password updated successfully!", "success");
     } catch (error) {
-      setErrors(error.response?.data?.errors || {});
-      showToast("Failed to update password. Please check the errors.", "error");
+      if (error.response?.status === 422) {
+        setErrors(error.response.data.errors);
+      } else {
+        showToast("Failed to update password. Please try again.", "error");
+      }
     }
   };
 

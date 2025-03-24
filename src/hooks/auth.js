@@ -107,20 +107,22 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
   }) => {
     try {
       await csrf();
-      setErrors([]);
 
-      await axios.put("/api/profile/password", {
+      const response = await axios.put("/api/profile/password", {
         password,
         password_confirmation,
       });
 
-      showToast("Password updated successfully!", "success");
+      setErrors([]);
+
+      return response.data;
     } catch (error) {
       if (error.response?.status === 422) {
         setErrors(error.response.data.errors);
       } else {
-        showToast("Password update failed:", "error");
+        showToast("Password update failed. Please try again.", "error");
       }
+      throw error;
     }
   };
 
