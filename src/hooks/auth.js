@@ -24,20 +24,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
   const csrf = () => axios.get("/sanctum/csrf-cookie");
 
-  const fetchUsers = async (page = 1) => {
-    const { data } = await axios.get(`/api/users?page=${page}`);
-    return data;
-  };
-
-  const fetchRoles = async () => {
-    const { data } = await axios.get("/api/roles");
-    return data;
-  };
-
-  const updateUserRoles = async (userId, roles) => {
-    await axios.put(`/api/users/${userId}/roles`, { roles });
-  };
-
   const register = async ({ setErrors, ...props }) => {
     await csrf();
 
@@ -137,8 +123,5 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     resetPassword,
     resendEmailVerification,
     logout,
-    fetchUsers,
-    fetchRoles,
-    updateUserRoles,
   };
 };

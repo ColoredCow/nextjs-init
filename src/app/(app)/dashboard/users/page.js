@@ -1,13 +1,13 @@
 // UsersPage.js
 "use client";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/hooks/auth";
+import { useUserActions } from "@/hooks/user";
 import SearchBar from "@/components/SearchBar";
+import Button from "@/components/Button";
 
 const UsersPage = () => {
-  const { fetchUsers, fetchRoles, updateUserRoles } = useAuth({
-    middleware: "auth",
-  });
+  const { fetchUsers, fetchRoles, updateUserRoles, deleteUser } =
+    useUserActions({ middleware: "auth" });
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [roles, setRoles] = useState([]);
@@ -26,7 +26,7 @@ const UsersPage = () => {
         ]);
         const userList = usersData?.data || [];
         setUsers(userList);
-        setFilteredUsers(userList); // Initialize filteredUsers with all users
+        setFilteredUsers(userList);
         setRoles(rolesData || []);
         setTotalPages(usersData?.last_page || 1);
       } catch (error) {
@@ -63,6 +63,19 @@ const UsersPage = () => {
     }
   };
 
+  const handleDeleteUser = async (userId) => {
+    if (confirm("Are you sure you want to delete this user?")) {
+      try {
+        await deleteUser(userId);
+        alert("User deleted successfully!");
+        const updatedUsers = await fetchUsers(currentPage);
+        setUsers(updatedUsers?.data || []);
+      } catch (error) {
+        alert("An error occurred. Please try again.");
+      }
+    }
+  };
+
   const handleSearchChange = (value) => {
     setSearchQuery(value);
   };
@@ -78,79 +91,86 @@ const UsersPage = () => {
   return (
     <div className="py-12">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <h1 className="text-xl font-bold mb-4">Manage Users</h1>
+        <h1 className="text-2xl font-bold mb-6">Manage Users</h1>
         <SearchBar
           searchQuery={searchQuery}
           onSearchChange={handleSearchChange}
         />
-        <table className="w-full border-collapse">
-          <thead>
-            <tr>
-              <th className="border p-2">Name</th>
-              <th className="border p-2">Email</th>
-              <th className="border p-2">Role</th>
-              <th className="border p-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredUsers.length > 0 ? (
-              filteredUsers.map((user) => (
-                <tr key={user.id}>
-                  <td className="border p-2">{user.name}</td>
-                  <td className="border p-2">{user.email}</td>
-                  <td className="border p-2">
-                    <select
-                      value={user?.roles?.[0]?.name || ""}
-                      onChange={(e) =>
-                        handleRoleChange(user.id, e.target.value)
-                      }
-                      className="w-full"
-                    >
-                      <option value="">Select Role</option>
-                      {roles.map((role) => (
-                        <option key={role.id} value={role.name}>
-                          {role.name}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td className="border p-2">
-                    <button
-                      onClick={() => handleRoleChange(user.id, "")}
-                      className="px-3 py-1 bg-red-500 text-white rounded"
-                    >
-                      Remove Role
-                    </button>
+        <div className="overflow-x-auto mt-4">
+          <table className="min-w-full table-auto border rounded-lg overflow-hidden">
+            <thead>
+              <tr className="bg-gray-800 text-white">
+                <th className="p-4 text-left">Name</th>
+                <th className="p-4 text-left">Email</th>
+                <th className="p-4 text-center">Role</th>
+                <th className="p-4 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredUsers.length > 0 ? (
+                filteredUsers.map((user) => (
+                  <tr key={user.id} className="odd:bg-gray-50 even:bg-white">
+                    <td className="p-4 text-gray-700 truncate max-w-xs">
+                      {user.name}
+                    </td>
+                    <td className="p-4 text-gray-700 truncate max-w-xs">
+                      {user.email}
+                    </td>
+                    <td className="p-4 text-center">
+                      <select
+                        value={user?.roles?.[0]?.name || ""}
+                        onChange={(e) =>
+                          handleRoleChange(user.id, e.target.value)
+                        }
+                        className="w-32 p-2 border rounded"
+                      >
+                        <option value="">Select Role</option>
+                        {roles.map((role) => (
+                          <option key={role.id} value={role.name}>
+                            {role.name}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="p-4 text-center">
+                      <Button
+                        onClick={() => handleDeleteUser(user.id)}
+                        className="bg-red-500 hover:bg-red-600"
+                      >
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="p-4 text-center">
+                    No users found.
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="4" className="border p-2 text-center">
-                  No users found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-        <div className="flex justify-between mt-4">
-          <button
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="flex justify-between mt-6">
+          <Button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
             className="px-4 py-2 bg-gray-300 rounded"
           >
             Previous
-          </button>
+          </Button>
           <span>
             Page {currentPage} of {totalPages}
           </span>
-          <button
+          <Button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
             className="px-4 py-2 bg-gray-300 rounded"
           >
             Next
-          </button>
+          </Button>
         </div>
       </div>
     </div>
