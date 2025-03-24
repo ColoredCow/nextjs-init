@@ -1,10 +1,18 @@
+"use client";
+
+import { useEffect } from "react";
+import { showToast } from "@/components/ToastProvider";
 import Header from "@/app/(app)/Header";
 
-export const metadata = {
-  title: "Laravel - Dashboard",
-};
-
 const Dashboard = () => {
+  useEffect(() => {
+    const message = localStorage.getItem("loginSuccess");
+    if (message) {
+      showToast(message, "success");
+      localStorage.removeItem("loginSuccess");
+    }
+  }, []);
+
   return (
     <>
       <Header title="Dashboard" />

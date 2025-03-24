@@ -42,6 +42,10 @@ const Login = () => {
       setErrors,
       setStatus,
     });
+
+    if (errors.length === 0) {
+      localStorage.setItem("loginSuccess", "You are successfully logged in!");
+    }
   };
 
   return (
