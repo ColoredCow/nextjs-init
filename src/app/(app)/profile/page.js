@@ -69,7 +69,7 @@ export default function ProfilePage() {
       <div className="mx-auto max-w-4xl space-y-6">
         {/* Header Section */}
         <header className="rounded-xl bg-white p-6 text-gray-900 shadow-lg">
-          <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:gap-6">
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
             <div className="relative flex-shrink-0">
               <img
                 src={user?.profilePicture || "/profileImage.png"}
