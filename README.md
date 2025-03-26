@@ -28,8 +28,7 @@
    - Copy `.env.example` to `.env` and configure as needed.
 
      ```ini
-     # If hosted using "serve"
-     NEXT_PUBLIC_BACKEND_URL=http://localhost:3000
+     NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
      ```
 
 4. Start the development server:
