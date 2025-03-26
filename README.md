@@ -35,6 +35,9 @@
 
    ```sh
    npm run dev
+
+   # or this if you want to run on a different port
+   npm run dev -- -p 8888
    ```
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
