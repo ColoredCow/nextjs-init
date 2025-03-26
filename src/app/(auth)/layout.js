@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
             <Link href="/">
               <img
                 src={process.env.NEXT_PUBLIC_APP_LOGO || "/logo.png"}
-                alt="Logo"
+                alt="logo"
                 className="h-10 w-auto"
               />
             </Link>
