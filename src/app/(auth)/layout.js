@@ -3,7 +3,7 @@ import AuthCard from "@/app/(auth)/AuthCard";
 import ApplicationLogo from "@/components/ApplicationLogo";
 
 export const metadata = {
-  title: "Laravel",
+  title: "ColoredCow",
 };
 
 const Layout = ({ children }) => {
@@ -13,7 +13,11 @@ const Layout = ({ children }) => {
         <AuthCard
           logo={
             <Link href="/">
-              <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
+              <img
+                src={process.env.NEXT_PUBLIC_APP_LOGO || "/logo.png"}
+                alt="logo"
+                className="h-10 w-auto"
+              />
             </Link>
           }
         >

@@ -38,7 +38,11 @@ const Navigation = ({ user }) => {
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center">
               <Link href="/dashboard">
-                <ApplicationLogo className="block h-10 w-auto fill-current text-gray-600" />
+                <img
+                  src={process.env.NEXT_PUBLIC_APP_LOGO || "/logo.png"}
+                  alt="logo"
+                  className="h-10 w-auto"
+                />
               </Link>
             </div>
 
