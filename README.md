@@ -41,3 +41,7 @@
    ```
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
+
+### Customization
+
+For information on customizing the app name, logo, and other settings, refer to the [Customization Guide](docs/customization.md).
