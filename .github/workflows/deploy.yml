@@ -1,42 +1,47 @@
-name: Deploy Next.js App 
-
+name: Staging Deployment
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  deploy:
+  build:
+    name: Build & Deploy
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
+      - name: Test SSH connectivity
+        run: nc -zv ${{ secrets.UAT_SSH_HOST }} 22
 
-    - name: Install dependencies
-      run: npm install
+      - name: Deploy to Staging
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: "${{ secrets.UAT_SSH_HOST }}"
+          username: "${{ secrets.UAT_SSH_USERNAME }}"
+          key: "${{ secrets.UAT_SSH_PRIVATE_KEY }}"
+          script: |
+            echo "Navigating to build directory: ${{ secrets.UAT_SSH_BUILD_DIRECTORY }}"
+            cd ${{ secrets.UAT_SSH_BUILD_DIRECTORY }} || exit 1
+            echo "Current directory: $(pwd)"
 
-    - name: Build project
-      run: npm run build
+            echo "Pulling latest code..."
+            git checkout -f
+            git pull origin main
 
-    - name: Deploy to server
-      env:
-        DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
-        SERVER_USER: ${{ secrets.EC2_USER }}
-        SERVER_HOST: ${{ secrets.EC2_HOST }}
-      run: |
-        echo "$DEPLOY_KEY" > deploy_key.pem
-        chmod 600 deploy_key.pem
-        ssh -o StrictHostKeyChecking=no -i deploy_key.pem $SERVER_USER@$SERVER_HOST << 'EOF'
-          cd /path/to/app
-          git pull origin main
-          npm install
-          npm run build
-          pm2 restart nextjs-app
-        EOF
-        rm -f deploy_key.pem
+            echo "Setting up Node.js..."
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            nvm use 22 || nvm install 22
+
+            echo "Cleaning cache..."
+            npm cache clean --force
+
+            echo "Installing dependencies..."
+            npm install
+
+            echo "Building project..."
+            npm run build
+
+            echo "Restarting server..."
+            pm2 restart all
