@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import Button from "./Button";
 
 const ConfirmPopup = ({ isOpen, message, onConfirm, onCancel }) => {
   const handleOverlayClick = (e) => {
@@ -30,18 +31,15 @@ const ConfirmPopup = ({ isOpen, message, onConfirm, onCancel }) => {
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
         <p className="mb-4 text-gray-700">{message}</p>
         <div className="flex justify-end space-x-4">
-          <button
-            onClick={onCancel}
-            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-          >
+          <Button onClick={onCancel} className="bg-gray-300 hover:bg-gray-400">
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={onConfirm}
-            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+            className="bg-red-500 text-white hover:bg-red-600"
           >
             Confirm
-          </button>
+          </Button>
         </div>
       </div>
     </div>
