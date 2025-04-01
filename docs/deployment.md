@@ -33,7 +33,7 @@ If you're modifying this workflow for a different project, update the following:
    - Modify `branches: [main]` in `.github/workflows/deploy.yml` to match your preferred deployment branch.
 
 3. **Ensure Node.js Compatibility:**
-   - The workflow uses `nvm use 22 || nvm install 22` to set up Node.js.
+   - The workflow uses `nvm use 18 || nvm install 18` to set up Node.js.
    - If your project requires a different version, update this in `deploy.yml`.
 
 4. **Update Deployment Directory:**
