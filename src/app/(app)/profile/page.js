@@ -104,6 +104,7 @@ export default function ProfilePage() {
                 id="name"
                 type="text"
                 value={name}
+                maxLength={50}
                 onChange={(e) => setName(e.target.value)}
                 required
                 className="w-full"
