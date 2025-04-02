@@ -40,14 +40,21 @@ describe("ProfilePage", () => {
         email: "john@example.com",
         setErrors: expect.any(Function),
       });
-      expect(showToast).toHaveBeenCalledWith("Profile updated successfully!", "success");
+      expect(showToast).toHaveBeenCalledWith(
+        "Profile updated successfully!",
+        "success"
+      );
     });
   });
 
   test("updates password successfully", async () => {
     render(<ProfilePage />);
-    fireEvent.change(screen.getByTestId("password"), { target: { value: "newpassword" } });
-    fireEvent.change(screen.getByTestId("passwordConfirmation"), { target: { value: "newpassword" } });
+    fireEvent.change(screen.getByTestId("password"), {
+      target: { value: "newpassword" },
+    });
+    fireEvent.change(screen.getByTestId("passwordConfirmation"), {
+      target: { value: "newpassword" },
+    });
 
     fireEvent.click(screen.getByTestId("update-password"));
 
@@ -57,7 +64,10 @@ describe("ProfilePage", () => {
         password_confirmation: "newpassword",
         setErrors: expect.any(Function),
       });
-      expect(showToast).toHaveBeenCalledWith("Password updated successfully!", "success");
+      expect(showToast).toHaveBeenCalledWith(
+        "Password updated successfully!",
+        "success"
+      );
     });
   });
 });
