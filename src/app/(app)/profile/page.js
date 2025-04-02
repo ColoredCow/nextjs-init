@@ -112,7 +112,9 @@ export default function ProfilePage() {
               />
               <InputError messages={errors.name} />
             </div>
-            <Button type="submit" data-testid="save-profile">Save Profile</Button>
+            <Button type="submit" data-testid="save-profile">
+              Save Profile
+            </Button>
           </form>
         </section>
 
@@ -146,7 +148,9 @@ export default function ProfilePage() {
               />
               <InputError messages={errors.password_confirmation} />
             </div>
-            <Button type="submit" data-testid="update-password">Update Password</Button>
+            <Button type="submit" data-testid="update-password">
+              Update Password
+            </Button>
           </form>
         </section>
       </div>
