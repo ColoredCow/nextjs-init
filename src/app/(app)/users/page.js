@@ -147,12 +147,12 @@ const UsersPage = () => {
                             setIsPopupOpen(true);
                           }
                         }}
+                        aria-disabled={user.id === currentUser.id}
                         className={`${
                           user.id === currentUser.id
-                            ? "bg-gray-400 cursor-not-allowed"
+                            ? "bg-gray-400 cursor-not-allowed opacity-50"
                             : "bg-red-500 hover:bg-red-600"
                         }`}
-                        disabled={user.id === currentUser.id}
                       >
                         Delete
                       </Button>
