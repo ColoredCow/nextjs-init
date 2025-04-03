@@ -83,17 +83,7 @@ const UsersPage = () => {
     setUserToDelete(null);
   };
 
-  const handleSearchChange = (value) => {
-    setSearchQuery(value);
-  };
-
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage);
-    }
-  };
-
-  if (loading) return <p>Loading users...</p>;
+  if (loading) return <p data-testid="loading-users">Loading users...</p>;
 
   return (
     <div className="py-12">
@@ -101,7 +91,7 @@ const UsersPage = () => {
         <h1 className="text-2xl font-bold mb-6">Manage Users</h1>
         <SearchBar
           searchQuery={searchQuery}
-          onSearchChange={handleSearchChange}
+          onSearchChange={(value) => setSearchQuery(value)}
         />
         <div className="overflow-x-auto mt-4">
           <table className="min-w-full table-auto border rounded-lg overflow-hidden">
@@ -114,63 +104,57 @@ const UsersPage = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredUsers.length > 0 ? (
-                filteredUsers.map((user) => (
-                  <tr key={user.id} className="odd:bg-gray-50 even:bg-white">
-                    <td className="p-4 text-gray-700 truncate max-w-xs">
-                      {user.name}
-                    </td>
-                    <td className="p-4 text-gray-700 truncate max-w-xs">
-                      {user.email}
-                    </td>
-                    <td className="p-4 text-center">
-                      <select
-                        value={user?.roles?.[0]?.name || ""}
-                        onChange={(e) =>
-                          handleRoleChange(user.id, e.target.value)
+              {filteredUsers.map((user) => (
+                <tr key={user.id} className="odd:bg-gray-50 even:bg-white">
+                  <td className="p-4 text-gray-700 truncate max-w-xs">
+                    {user.name}
+                  </td>
+                  <td className="p-4 text-gray-700 truncate max-w-xs">
+                    {user.email}
+                  </td>
+                  <td className="p-4 text-center">
+                    <select
+                      data-testid={`role-select-${user.id}`}
+                      value={user?.roles?.[0]?.name || ""}
+                      onChange={(e) =>
+                        handleRoleChange(user.id, e.target.value)
+                      }
+                      className="w-32 p-2 border rounded"
+                    >
+                      <option value="">Select Role</option>
+                      {roles.map((role) => (
+                        <option key={role.id} value={role.name}>
+                          {role.name}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td className="p-4 text-center">
+                    <Button
+                      data-testid={`delete-user-${user.id}`}
+                      onClick={() => {
+                        if (user.id !== currentUser.id) {
+                          setUserToDelete(user.id);
+                          setIsPopupOpen(true);
                         }
-                        className="w-32 p-2 border rounded"
-                      >
-                        <option value="">Select Role</option>
-                        {roles.map((role) => (
-                          <option key={role.id} value={role.name}>
-                            {role.name}
-                          </option>
-                        ))}
-                      </select>
-                    </td>
-                    <td className="p-4 text-center">
-                      <Button
-                        onClick={() => {
-                          if (user.id !== currentUser.id) {
-                            setUserToDelete(user.id);
-                            setIsPopupOpen(true);
-                          }
-                        }}
-                        disabled={user.id === currentUser.id}
-                        className="bg-red-500 hover:bg-red-600"
-                      >
-                        Delete
-                      </Button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="4" className="p-4 text-center">
-                    No users found.
+                      }}
+                      disabled={user.id === currentUser.id}
+                      className="bg-red-500 hover:bg-red-600"
+                    >
+                      Delete
+                    </Button>
                   </td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </div>
 
         <div className="flex justify-between mt-6">
           <Button
-            onClick={() => handlePageChange(currentPage - 1)}
+            data-testid="pagination-previous"
+            onClick={() => setCurrentPage(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-4 py-2 bg-gray-300 rounded"
           >
             Previous
           </Button>
@@ -178,9 +162,9 @@ const UsersPage = () => {
             Page {currentPage} of {totalPages}
           </span>
           <Button
-            onClick={() => handlePageChange(currentPage + 1)}
+            data-testid="pagination-next"
+            onClick={() => setCurrentPage(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-gray-300 rounded"
           >
             Next
           </Button>
@@ -190,10 +174,7 @@ const UsersPage = () => {
           isOpen={isPopupOpen}
           message="Are you sure you want to delete this user?"
           onConfirm={handleConfirmDelete}
-          onCancel={() => {
-            setIsPopupOpen(false);
-            setUserToDelete(null);
-          }}
+          onCancel={() => setIsPopupOpen(false)}
         />
       </div>
     </div>
