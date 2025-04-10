@@ -1,4 +1,4 @@
-name: Staging Deployment
+name: Production Deployment
 on:
   push:
     branches: [main]
@@ -43,5 +43,3 @@ jobs:
             echo "Building project..."
             npm run build
 
-            echo "Restarting server..."
-            pm2 restart all

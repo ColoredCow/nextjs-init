@@ -5,10 +5,12 @@ import SearchBar from "@/components/SearchBar";
 import Button from "@/components/Button";
 import ConfirmPopup from "@/components/ConfirmPopup";
 import { showToast } from "@/components/ToastProvider";
+import { useAuth } from "@/hooks/auth";
 
 const UsersPage = () => {
   const { fetchUsers, fetchRoles, updateUserRoles, deleteUser } =
     useUserActions({ middleware: "auth" });
+  const { user: currentUser } = useAuth();
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [roles, setRoles] = useState([]);
@@ -140,9 +142,12 @@ const UsersPage = () => {
                     <td className="p-4 text-center">
                       <Button
                         onClick={() => {
-                          setUserToDelete(user.id);
-                          setIsPopupOpen(true);
+                          if (user.id !== currentUser.id) {
+                            setUserToDelete(user.id);
+                            setIsPopupOpen(true);
+                          }
                         }}
+                        disabled={user.id === currentUser.id}
                         className="bg-red-500 hover:bg-red-600"
                       >
                         Delete
