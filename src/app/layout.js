@@ -15,7 +15,10 @@ const RootLayout = ({ children }) => {
 };
 
 export const metadata = {
-  title: "Laravel",
+  title: process.env.NEXT_PUBLIC_APP_NAME || "ColoredCow",
+  icons: {
+    icon: process.env.NEXT_PUBLIC_APP_ICON_PATH || "/favicon.png",
+  },
 };
 
 export default RootLayout;

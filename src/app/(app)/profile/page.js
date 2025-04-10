@@ -102,15 +102,19 @@ export default function ProfilePage() {
               <Label htmlFor="name">Full Name</Label>
               <Input
                 id="name"
+                data-testid="name"
                 type="text"
                 value={name}
+                maxLength={50}
                 onChange={(e) => setName(e.target.value)}
                 required
                 className="w-full"
               />
               <InputError messages={errors.name} />
             </div>
-            <Button type="submit">Save Profile</Button>
+            <Button type="submit" data-testid="save-profile">
+              Save Profile
+            </Button>
           </form>
         </section>
 
@@ -122,6 +126,7 @@ export default function ProfilePage() {
               <Label htmlFor="password">New Password</Label>
               <Input
                 id="password"
+                data-testid="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -134,6 +139,7 @@ export default function ProfilePage() {
               <Label htmlFor="passwordConfirmation">Confirm Password</Label>
               <Input
                 id="passwordConfirmation"
+                data-testid="passwordConfirmation"
                 type="password"
                 value={passwordConfirmation}
                 onChange={(e) => setPasswordConfirmation(e.target.value)}
@@ -142,7 +148,9 @@ export default function ProfilePage() {
               />
               <InputError messages={errors.password_confirmation} />
             </div>
-            <Button type="submit">Update Password</Button>
+            <Button type="submit" data-testid="update-password">
+              Update Password
+            </Button>
           </form>
         </section>
       </div>

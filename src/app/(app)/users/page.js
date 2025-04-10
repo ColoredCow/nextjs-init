@@ -3,10 +3,14 @@ import { useEffect, useState } from "react";
 import { useUserActions } from "@/hooks/user";
 import SearchBar from "@/components/SearchBar";
 import Button from "@/components/Button";
+import ConfirmPopup from "@/components/ConfirmPopup";
+import { showToast } from "@/components/ToastProvider";
+import { useAuth } from "@/hooks/auth";
 
 const UsersPage = () => {
   const { fetchUsers, fetchRoles, updateUserRoles, deleteUser } =
     useUserActions({ middleware: "auth" });
+  const { user: currentUser } = useAuth();
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [roles, setRoles] = useState([]);
@@ -14,6 +18,8 @@ const UsersPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,7 +35,7 @@ const UsersPage = () => {
         setRoles(rolesData || []);
         setTotalPages(usersData?.last_page || 1);
       } catch (error) {
-        alert("An error occurred. Please try again.");
+        showToast("An error occurred. Please try again.");
       }
       setLoading(false);
     };
@@ -54,25 +60,27 @@ const UsersPage = () => {
     try {
       const rolePayload = selectedRole ? [selectedRole] : [];
       await updateUserRoles(userId, rolePayload);
-      alert("Role updated successfully!");
+      showToast("Role updated successfully!");
       const updatedUsers = await fetchUsers(currentPage);
       setUsers(updatedUsers?.data || []);
     } catch (error) {
-      alert("An error occurred. Please try again.");
+      showToast("An error occurred. Please try again.");
     }
   };
 
-  const handleDeleteUser = async (userId) => {
-    if (confirm("Are you sure you want to delete this user?")) {
+  const handleConfirmDelete = async () => {
+    if (userToDelete) {
       try {
-        await deleteUser(userId);
-        alert("User deleted successfully!");
+        await deleteUser(userToDelete);
+        showToast("User deleted successfully!");
         const updatedUsers = await fetchUsers(currentPage);
         setUsers(updatedUsers?.data || []);
       } catch (error) {
-        alert("An error occurred. Please try again.");
+        showToast("An error occurred. Please try again.");
       }
     }
+    setIsPopupOpen(false);
+    setUserToDelete(null);
   };
 
   const handleSearchChange = (value) => {
@@ -133,7 +141,13 @@ const UsersPage = () => {
                     </td>
                     <td className="p-4 text-center">
                       <Button
-                        onClick={() => handleDeleteUser(user.id)}
+                        onClick={() => {
+                          if (user.id !== currentUser.id) {
+                            setUserToDelete(user.id);
+                            setIsPopupOpen(true);
+                          }
+                        }}
+                        disabled={user.id === currentUser.id}
                         className="bg-red-500 hover:bg-red-600"
                       >
                         Delete
@@ -171,6 +185,16 @@ const UsersPage = () => {
             Next
           </Button>
         </div>
+
+        <ConfirmPopup
+          isOpen={isPopupOpen}
+          message="Are you sure you want to delete this user?"
+          onConfirm={handleConfirmDelete}
+          onCancel={() => {
+            setIsPopupOpen(false);
+            setUserToDelete(null);
+          }}
+        />
       </div>
     </div>
   );
