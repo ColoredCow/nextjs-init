@@ -1,0 +1,63 @@
+name: Production Deployment - Frontend
+
+on:
+  push:
+    branches: [prod]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: frontend-production-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build & Deploy Frontend to Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: Test SSH connectivity
+        run: nc -zv ${{ secrets.PROD_SSH_HOST }} 22
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: "${{ secrets.PROD_SSH_HOST }}"
+          username: "${{ secrets.PROD_SSH_USERNAME }}"
+          key: "${{ secrets.PROD_SSH_PRIVATE_KEY }}"
+          script: |
+            bash ${{ secrets.PROD_SSH_BUILD_DIRECTORY }}/scripts/deploy_prod.sh
+
+      - name: Generate and push prod tag
+        run: bash scripts/generate_tag.sh
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install gh -y
+
+      - name: Generate changelog and create GitHub release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          bash scripts/generate_change_log.sh
+
+          TAG_NAME=$(cat new_tag.txt)
+          gh release create "$TAG_NAME" \
+            --title "Frontend Release - $TAG_NAME" \
+            --notes-file release_notes.txt \
+            --target prod

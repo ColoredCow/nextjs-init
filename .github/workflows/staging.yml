@@ -1,0 +1,48 @@
+name: Staging Deployment
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  build:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Test SSH connectivity
+        run: nc -zv ${{ secrets.UAT_SSH_HOST }} 22
+
+      - name: Deploy to Staging
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: '${{ secrets.UAT_SSH_HOST }}'
+          username: '${{ secrets.UAT_SSH_USERNAME }}'
+          key: '${{ secrets.UAT_SSH_PRIVATE_KEY }}'
+          script: |
+            echo "Navigating to build directory: ${{ secrets.UAT_SSH_BUILD_DIRECTORY }}"
+            cd ${{ secrets.UAT_SSH_BUILD_DIRECTORY }} || exit 1
+            echo "Current directory: $(pwd)"
+
+            echo "Pulling latest code from 'develop' branch..."
+            git fetch origin
+            git checkout -f develop
+            git pull origin develop
+
+            echo "Setting up Node.js..."
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            nvm use 22 || nvm install 22
+
+            echo "Cleaning cache..."
+            npm cache clean --force
+
+            echo "Installing dependencies..."
+            npm install
+
+            echo "Building project..."
+            npm run build
+
+            echo "Restarting PM2 process..."
+            pm2 restart nextjs-init
