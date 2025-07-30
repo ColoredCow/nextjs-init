@@ -1,3 +1,4 @@
+// Test change for Husky pre-commit hook
 import Image from "next/image";
 
 export default function Home() {
