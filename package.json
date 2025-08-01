@@ -10,7 +10,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "echo \"No tests yet\" && exit 0"
+    "lint:fix": "next lint --fix",
+    "prepare": "husky install",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
