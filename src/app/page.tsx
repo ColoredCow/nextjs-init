@@ -13,7 +13,7 @@ export default function Home() {
     >
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start relative z-10">
         <h1 className="text-4xl font-bold text-center sm:text-left">
-          SparkLegacy Dday Landing page
+          Landing Page
         </h1>
       </main>
     </div>
